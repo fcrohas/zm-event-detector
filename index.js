@@ -4,6 +4,12 @@ const fs = require('fs')
 // Prepare
 const config = JSON.parse(fs.readFileSync("./config.json", 'utf8'))
 
-const detector = new Detector();
-const triggerManager = new TriggerManager(config.zmIP, config.zmPort);
+//const detector = new Detector();
+const triggerManager = new TriggerManager(config);
+
+// Login before start
+triggerManager.login(() => {
+	triggerManager.getEvent(34);
+});
+
 

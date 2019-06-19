@@ -1,4 +1,7 @@
 {
 	"zmIP" : "192.168.2.149",
-	"zmPort" : "6802"
+	"zmApiPort" : "8080",
+	"zmTriggerPort" : "6802",
+	"user" : "fcr",
+	"password" : "Snoopy20"
 }
