@@ -18,7 +18,7 @@ zmApi.login().then(
 		(event) => {
 			for(const frame of event.Frame) {
 				zmApi.getFrame(frame.EventId,frame.FrameId).then((image) => {
-					console.log(image);
+					fs.writeFile('/tmp/test_'+frame.EventId+'_'+frame.FrameId+'.jpg', image, 'binary', function(err){});
 				}).catch((error) => {
 					console.log(error);
 				});

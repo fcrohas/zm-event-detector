@@ -37,13 +37,15 @@ class ZmApi {
 
 	getFrame(eventId, frameId) {
 		return new Promise((resolve, reject) => { 
-			console.log(this.zmBase + '/index.php?view=image&fid='+frameId+'&eid='+eventId+'&show=capture&auth='+this.zmLogin.credentials);
-			// axios.get(this.zmBase + '/index.php?view=image&fid='+frameId+'&eid='+eventId+'&show=capture&auth='+this.zmLogin.credentials).then((res) => {
-			// 	resolve(res.data);
-			// })
-			// .catch((error) => {
-			// 	reject(error);
-			// });
+			//console.log(this.zmBase + '/index.php?view=image&fid='+frameId+'&eid='+eventId+'&show=capture&auth='+this.zmLogin.credentials);
+			//const cookie = 'zmSkin=classic; zmCSS=base; zmEventRate=0; zmMontageLayout=6; zmHeaderFlip=down; ZMSESSID=694ccb71db03337ac58310add621baa7'; , {headers:{ 'Cookie':cookie }, withCredentials:true}
+
+			axios.get(this.zmBase + '/index.php?view=image&fid='+frameId+'&eid='+eventId+'&show=capture&'+this.zmLogin.credentials).then((res) => {
+				resolve(res.data);
+			})
+			.catch((error) => {
+				reject(error);
+			});
 		});
 	}
 }
