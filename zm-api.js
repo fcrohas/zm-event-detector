@@ -1,5 +1,5 @@
 const axios = require('axios');
-const jsonic = require('jsonic')
+const jsonic = require('jsonic');
 
 class ZmApi {
 
@@ -37,15 +37,12 @@ class ZmApi {
 
 	getFrame(eventId, frameId) {
 		return new Promise((resolve, reject) => { 
-			//console.log(this.zmBase + '/index.php?view=image&fid='+frameId+'&eid='+eventId+'&show=capture&auth='+this.zmLogin.credentials);
-			//const cookie = 'zmSkin=classic; zmCSS=base; zmEventRate=0; zmMontageLayout=6; zmHeaderFlip=down; ZMSESSID=694ccb71db03337ac58310add621baa7'; , {headers:{ 'Cookie':cookie }, withCredentials:true}
-
-			axios.get(this.zmBase + '/index.php?view=image&fid='+frameId+'&eid='+eventId+'&show=capture&'+this.zmLogin.credentials).then((res) => {
-				resolve(res.data);
-			})
-			.catch((error) => {
-				reject(error);
-			});
+		  axios.get(this.zmBase + '/index.php?view=image&fid='+frameId+'&eid='+eventId+'&show=capture&'+this.zmLogin.credentials, {'responseType':'arraybuffer'}).then((res) => {
+		      resolve(Buffer.from(res.data));
+		  })
+		  .catch((error) => {
+			reject(error);
+		  });
 		});
 	}
 }

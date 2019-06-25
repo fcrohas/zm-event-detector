@@ -1,4 +1,5 @@
-const Darknet = require('darknet').Darknet;
+const { Darknet } = require('darknet');
+const decode = require('image-decode');
 const fs = require('fs');
 
 class Detector {
@@ -8,13 +9,15 @@ class Detector {
 		this.darknet = new Darknet({
 		    weights: './darknet/yolov3-tiny.weights',
 		    config: './darknet/yolov3-tiny.cfg',
-		    names: names.split('\r\n')
+		    names: names.split('\n')
 		});
 	}
 
 	detect(image) {
 		// Detect
-		console.log(darknet.detect(image));
+		const decoded = decode(image);
+		const img = {b:decoded.data, h: decoded.height, w: decoded.width, c: 4};
+		console.log(this.darknet.detect(img,{thresh:0.1, hier_thresh:0.4, nms:0.5}));
 	}
 }
 
