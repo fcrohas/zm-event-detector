@@ -17,7 +17,7 @@ class Detector {
 		// Detect
 		const decoded = decode(image);
 		const img = {b:decoded.data, h: decoded.height, w: decoded.width, c: 4};
-		console.log(this.darknet.detect(img,{thresh:0.1, hier_thresh:0.4, nms:0.5}));
+		return this.darknet.detect(img,{thresh:0.1, hier_thresh:0.4, nms:0.5});
 	}
 }
 

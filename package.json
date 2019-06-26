@@ -23,10 +23,10 @@
   "homepage": "https://github.com/fcrohas/zm-event-detector#readme",
   "dependencies": {
     "axios": "^0.19.0",
-    "darknet": "^1.3.9",
+    "darknet": "https://github.com/fcrohas/darknet.js.git",
     "image-decode": "^1.2.2",
+    "jimp": "^0.6.4",
     "jsonic": "^0.3.1",
-    "mongodb": "^3.2.7",
-    "stream-to-array": "^2.3.0"
+    "mongodb": "^2.2.0"
   }
 }
