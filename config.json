@@ -4,5 +4,6 @@
 	"zmTriggerPort" : "6802",
 	"user" : "fcr",
 	"password" : "Snoopy20",
-	"mongoUrl" : "mongodb://192.168.2.6:27017/zoneminder"
+	"mongoUrl" : "mongodb://192.168.2.6:27017/zoneminder",
+	"httpPort" : 3000
 }

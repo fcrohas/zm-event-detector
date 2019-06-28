@@ -1,24 +1,25 @@
 const TriggerManager = require('./trigger-manager');
-const Detector = require('./detector');
+//const Detector = require('./detector');
 const ZmApi = require('./zm-api');
 const Store = require('./store');
 const ImageProcessor = require('./image-processor');
+const WebServer = require('./web-server');
 
 const fs = require('fs');
 const Path = require('path');
 // Prepare
 const config = JSON.parse(fs.readFileSync("./config.json", 'utf8'))
-
-const detector = new Detector();
+const webServer = new WebServer(config);
+//const detector = new Detector();
 const triggerManager = new TriggerManager(config);
 const zmApi = new ZmApi(config);
 const store = new Store(config);
 const imageProcessor = new ImageProcessor();
-// Start store connection
 
-
+// Start web server
+webServer.listen();
 // Login before start
-zmApi.login().then(
+/*zmApi.login().then(
 		(login) => {
 			return store.connect();
 	}).then(
@@ -62,5 +63,5 @@ zmApi.login().then(
 	}).catch((error) => {
 		console.error(error);
 	});
-
+*/
 
