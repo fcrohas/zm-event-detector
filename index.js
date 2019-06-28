@@ -9,15 +9,16 @@ const fs = require('fs');
 const Path = require('path');
 // Prepare
 const config = JSON.parse(fs.readFileSync("./config.json", 'utf8'))
-const webServer = new WebServer(config);
 //const detector = new Detector();
 const triggerManager = new TriggerManager(config);
 const zmApi = new ZmApi(config);
 const store = new Store(config);
 const imageProcessor = new ImageProcessor();
+const webServer = new WebServer(config,store);
 
 // Start web server
 webServer.listen();
+store.connect();
 // Login before start
 /*zmApi.login().then(
 		(login) => {

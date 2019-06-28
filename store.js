@@ -8,7 +8,7 @@ class Store {
 
    connect() {
       return new Promise( (resolve, reject) => {
-        MongoClient.connect( this.url, { useNewUrlParser: true }).then( (client) => {
+        MongoClient.connect( this.url, {}).then( (client) => {
 	   this.db = client;
 	   resolve(client);
 	   console.log('Connected to database');
@@ -41,6 +41,22 @@ class Store {
 	} else {
 	  reject('Not connected');
 	}
+      });
+   }
+
+   findEvent(expr,start, count) {
+      return new Promise( (resolve, reject) => {
+      	if (!this.db) {
+	   reject('Not connected to database');
+      	}
+	const eventCollection = this.db.collection('events');
+	console.log('expression => ', expr);
+	eventCollection.find(expr).skip(start).limit(count).toArray().then((docs) => {
+	   resolve(docs);
+	}).catch((err) => {
+	   reject(err);
+	});
+	
       });
    }
 
