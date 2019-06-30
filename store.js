@@ -7,16 +7,16 @@ class Store {
    }
 
    connect() {
-      return new Promise( (resolve, reject) => {
-        MongoClient.connect( this.url, {}).then( (client) => {
-	   this.db = client;
-	   resolve(client);
-	   console.log('Connected to database');
-        }).catch((err) => {
-	   reject(err);
-	   console.log('Not connected to database:', err);
-	});
-      }); 
+	return new Promise( (resolve, reject) => {
+		MongoClient.connect( this.url, {}).then( (client) => {
+			this.db = client;
+			resolve(client);
+			console.log('Connected to database');
+		}).catch((err) => {
+		reject(err);
+		console.log('Not connected to database:', err);
+		});
+	}); 
    }
 
    close() {
@@ -27,36 +27,48 @@ class Store {
 
    addEvents(objects) {
       return new Promise( (resolve, reject) => {
-	if (this.db) {
-	   const eventCollection = this.db.collection('events');
-	   eventCollection.insertMany(objects, (err, result) => {
-	     if(!err) {
-	   	console.log('events inserted');
-		resolve(result);
-		eventCollection.save();
-	     } else {
-		reject(err);
-	     }
-	   });
-	} else {
-	  reject('Not connected');
-	}
+		if (this.db) {
+		   const eventCollection = this.db.collection('events');
+		   eventCollection.insertMany(objects, (err, result) => {
+		     if(!err) {
+		   	console.log('events inserted');
+			resolve(result);
+			eventCollection.save();
+		     } else {
+			reject(err);
+		     }
+		   });
+		} else {
+		  reject('Not connected');
+		}
       });
    }
 
    findEvent(expr,start, count) {
       return new Promise( (resolve, reject) => {
       	if (!this.db) {
-	   reject('Not connected to database');
+			reject('Not connected to database');
       	}
-	const eventCollection = this.db.collection('events');
-	console.log('expression => ', expr);
-	eventCollection.find(expr).skip(start).limit(count).toArray().then((docs) => {
-	   resolve(docs);
-	}).catch((err) => {
-	   reject(err);
-	});
-	
+		const eventCollection = this.db.collection('events');
+		eventCollection.find(expr).skip(start).limit(count).toArray().then((docs) => {
+		   resolve(docs);
+		}).catch((err) => {
+		   reject(err);
+		});
+      });
+   }
+
+   getLastEvent() {
+      return new Promise( (resolve, reject) => {
+      	if (!this.db) {
+			reject('Not connected to database');
+      	}
+		const eventCollection = this.db.collection('events');
+		eventCollection.find({}).skip(0).limit(5).toArray().then((docs) => {
+		   resolve(docs);
+		}).catch((err) => {
+		   reject(err);
+		});
       });
    }
 

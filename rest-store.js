@@ -1,4 +1,5 @@
 const express = require('express');
+const morgan = require('morgan');
 
 class RestStore {
 	constructor(dbStore) {
@@ -6,25 +7,32 @@ class RestStore {
 	    this.router = express.Router();
 	}
 
-	logger(req, res, next) {
-	    console.log('Time: ', Date.now());
-	    next();
+	logger() {
+		return morgan('combined');
 	}
 
-	find(req, res) {
-	   console.log(req);
-	   this.dbStore.findEvent(req.body,0,10).then((results) => {
+	findEvent(req, res) {
+	   const filter = req.body;
+	   this.dbStore.findEvent(filter.query, filter.start, filter.count).then((results) => {
 	   	res.json(results);	
 	   }).catch((err) => {
 		res.status(500).json({error: err});
 	   });
-		
+	}
+
+	lastEvent(req, res) {
+	   this.dbStore.getLastEvent().then((results) => {
+	   	res.json(results);	
+	   }).catch((err) => {
+		res.status(500).json({error: err});
+	   });
 	}
 
 	getRouter() {
-	   this.router.use(this.logger);
-	   this.router.post('/find', (req,res) => this.find(req, res));
-	   return this.router;
+		this.router.use(this.logger());
+		this.router.post('/find', (req,res) => this.findEvent(req, res));
+		this.router.post('/last', (req,res) => this.lastEvent(req, res));
+		return this.router;
 	}
 }
 

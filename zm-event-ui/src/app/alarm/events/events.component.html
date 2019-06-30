@@ -1,0 +1,18 @@
+<h3>Last events detected</h3>
+<table>
+  <tr>
+    <th></th>
+    <th>Event Id</th>
+    <th>Frame Id</th>
+    <th>Type</th>
+    <th>Image</th>
+    <th></th>
+  </tr>
+  <tr *ngFor="let event of eventService.lastEvent() | async">
+  	<td></td>
+	<td>{{ event.eventId }}</td>
+	<td>{{ event.frameId }}</td>
+	<td>{{ event.name }}</td>
+	<td><img [src]="event.img"></td>
+  </tr>
+</table>

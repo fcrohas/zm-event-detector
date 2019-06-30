@@ -1,0 +1,38 @@
+<span>
+  Filter
+<!--   <mat-form-field class="example-full-width">
+    <input matInput [(ngModel)]="startDate placeholder="Favorite food" value="Sushi">
+  </mat-form-field>
+  &nbsp;From&nbsp;
+  <mat-form-field>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="startDate" placeholder="Choose a date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  &nbsp;To&nbsp;
+  <mat-form-field>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="endDate" placeholder="Choose a date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  &nbsp;
+  <button [(click)]="findEvents()">Search</button>
+-->
+</span>
+<table>
+  <tr>
+    <th></th>
+    <th>Event Id</th>
+    <th>Frame Id</th>
+    <th>Type</th>
+    <th>Image</th>
+    <th></th>
+  </tr>
+  <tr *ngFor="let event of eventService.lastEvent() | async">
+  	<td></td>
+	<td>{{ event.eventId }}</td>
+	<td>{{ event.frameId }}</td>
+	<td>{{ event.name }}</td>
+	<td><img [src]="event.img"></td>
+  </tr>
+</table>

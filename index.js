@@ -16,9 +16,10 @@ const store = new Store(config);
 const imageProcessor = new ImageProcessor();
 const webServer = new WebServer(config,store);
 
-// Start web server
-webServer.listen();
-store.connect();
+// Connect to store then serve page
+store.connect().then((client) => {
+	webServer.listen();
+});
 // Login before start
 /*zmApi.login().then(
 		(login) => {
