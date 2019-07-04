@@ -13,8 +13,7 @@ class Store {
 			resolve(client);
 			console.log('Connected to database');
 		}).catch((err) => {
-		reject(err);
-		console.log('Not connected to database:', err);
+			reject(err);
 		});
 	}); 
    }

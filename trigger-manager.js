@@ -2,15 +2,28 @@ const net = require('net');
 
 class TriggerManager {
 
-	constructor(config) {
+	constructor(config, context) {
 		this.config = config;
-		this.zm = net.connect(config.zmTriggerPort, config.zmIP);
-		this.zm.on('error', this.onError);
-		this.zm.on('data', this.onData);
+		this.connected = false;
+		this.context = context;
+		this.states = [];
 	}
 
-	onError(ex) {
-		console.log('Connection to Zoneminder error ', ex);
+	connect() {
+		return new Promise( (resolve, reject) => {
+			this.zm = net.connect(this.config.zmTriggerPort, this.config.zmIP, () => {
+				this.connected = true;
+				resolve();
+			});
+			this.zm.on('error', (ex) => {
+				if (!this.connected) {
+					reject();
+				} else {
+					console.log('Connection to Zoneminder error ', ex);
+				}
+			});
+			this.zm.on('data', (data) => this.onData(data));
+		});
 	}
 
 	onData(data) {
@@ -21,7 +34,34 @@ class TriggerManager {
 		const timestamp = datas[2];
 		const eventId = datas[3];
 		console.log('monitorId=',monitorId, 'status=',status, 'timestamp=',new Date(timestamp), 'eventId=', eventId);
+		if (this.states[eventId] == undefined) {
+			this.states[eventId] = status;
+		} else if (this.states[eventId] != status ) {
+			this.context.api.getEvent(eventId).then((event) => this.processFrames(event, timestamp));
+			this.states[eventId] = status;
+		}
+	}
 
+	processFrames(event, timestamp) {
+		for(const frame of event.Frame) {
+			this.context.api.getFrame(frame.EventId,frame.FrameId).then((image) => {
+				const eventObjects = this.context.detector.detect(image);
+	           	// maps events with id
+   				let count = 0;
+   				const objects = this.context.detector.processObjects(image, eventObjects, timestamp);
+				Promise.all(objects).then((results) => {
+				  this.context.store.addEvents(results).then((result) => {
+				     console.log(result);
+				  }).catch((err) => {
+				     console.log(err);
+				  });
+				}).catch((err) => {
+				  console.log(err);
+				});
+			}).catch((error) => {
+				console.log(error);
+			});
+		};
 	}
 }
 
