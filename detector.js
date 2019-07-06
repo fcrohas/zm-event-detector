@@ -18,17 +18,18 @@ class Detector {
 		// Detect
 		const decoded = decode(image);
 		const img = {b:decoded.data, h: decoded.height, w: decoded.width, c: 4};
-		return this.darknet.detect(img,{thresh:0.1, hier_thresh:0.4, nms:0.5});
+		return this.darknet.detect(img,{thresh:0.5, hier_thresh:0.4, nms:0.5});
 	}
 
-	processObjects(image, eventObjects, timestamp) {
-		eventObjects.map( obj => {
+	processObjects(image, eventObjects, timestamp, frame) {
+		let count = 0;
+		return eventObjects.map( obj => {
+			count++;
 			return new Promise((resolve, reject) => {
-	                	obj._id = frame.EventId + '_' + frame.FrameId + '_' + count;
-	                	count++;
+				obj._id = frame.EventId + '_' + frame.FrameId + '_' + count;
 	                	obj.eventId = frame.EventId;
 	                	obj.frameId = frame.FrameId;
-	                	obj.timestamp = timestamp;
+	                	obj.timestamp = frame.TimeStamp;
 				this.imageProcessor.crop(image, obj.box).then((data) => {
 				   obj.img = data;
 				   resolve(obj);

@@ -42,13 +42,13 @@ class TriggerManager {
 		}
 	}
 
-	processFrames(event, timestamp) {
-		for(const frame of event.Frame) {
+	processFrames( event, timestamp) {
+		const filtered = event.Frame.filter( f => f.Type == 'Alarm');
+		for(const frame of filtered) {
 			this.context.api.getFrame(frame.EventId,frame.FrameId).then((image) => {
 				const eventObjects = this.context.detector.detect(image);
-	           	// maps events with id
-   				let count = 0;
-   				const objects = this.context.detector.processObjects(image, eventObjects, timestamp);
+	           		// maps events with id
+   				const objects = this.context.detector.processObjects(image, eventObjects, timestamp, frame);
 				Promise.all(objects).then((results) => {
 				  this.context.store.addEvents(results).then((result) => {
 				     console.log(result);
