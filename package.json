@@ -30,7 +30,7 @@
     "image-decode": "^1.2.2",
     "jimp": "^0.6.4",
     "jsonic": "^0.3.1",
-    "mongodb": "^2.2.0",
+    "mongodb": "^3.6.1",
     "morgan": "^1.9.1"
   }
 }
